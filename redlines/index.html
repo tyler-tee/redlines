@@ -22,6 +22,21 @@
             Red Lines
         </div>
         <div id="header-actions">
+            <button id="generate-report-btn" class="btn-header" title="Generate Report">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <line x1="10" y1="9" x2="8" y2="9"></line>
+                </svg>
+            </button>
+            <button id="command-history-btn" class="btn-header" title="Command History">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+            </button>
             <button id="tools-btn" class="btn-header" title="Tools">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
@@ -71,6 +86,10 @@
         </div>
         <div id="sidebar-search">
             <input type="text" id="search-input" placeholder="Search notes...">
+            <div id="search-filters" class="search-filters">
+                <button id="filter-by-tags" class="filter-btn">Filter by Tags</button>
+                <button id="filter-by-date" class="filter-btn">Filter by Date</button>
+            </div>
         </div>
         <div id="tree-container"></div>
     </div>
@@ -79,6 +98,10 @@
         <div id="content-header">
             <div class="content-title">
                 <input type="text" id="note-title" placeholder="Note title" readonly>
+                <div id="note-tags-container" class="note-tags-container">
+                    <div class="note-tags-list"></div>
+                    <button id="add-tag-btn" class="btn-tag">+</button>
+                </div>
             </div>
             <div id="content-actions">
                 <button id="delete-btn" class="btn-content" title="Delete">
@@ -113,6 +136,14 @@
                 <div class="tab" data-target="preview">Preview</div>
             </div>
             <div id="editor-actions">
+                <button id="screenshot-btn" class="btn-editor" title="Add Screenshot">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    Screenshot
+                </button>
                 <button id="template-btn" class="btn-editor" title="Insert Template">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
@@ -126,6 +157,20 @@
                         <polyline points="8 6 2 12 8 18"></polyline>
                     </svg>
                     Code
+                </button>
+                <button id="link-note-btn" class="btn-editor" title="Link to Another Note">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                    </svg>
+                    Link Note
+                </button>
+                <button id="command-btn" class="btn-editor" title="Save Command">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 17l6-6-6-6"></path>
+                        <path d="M12 19h8"></path>
+                    </svg>
+                    Command
                 </button>
             </div>
             <textarea id="editor" placeholder="Start writing your notes using Markdown..."></textarea>
@@ -159,22 +204,23 @@
                 <div class="feature-card">
                     <div class="feature-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                            <polyline points="21 15 16 10 5 21"></polyline>
                         </svg>
                     </div>
-                    <div class="feature-title">Search</div>
-                    <div class="feature-text">Quickly find notes with powerful search</div>
+                    <div class="feature-title">Screenshot Management</div>
+                    <div class="feature-text">Document evidence with integrated screenshots</div>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
-                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
                         </svg>
                     </div>
-                    <div class="feature-title">Export/Import</div>
-                    <div class="feature-text">Save and restore your notes</div>
+                    <div class="feature-title">Note Linking</div>
+                    <div class="feature-text">Create connections between related findings</div>
                 </div>
             </div>
             
@@ -186,6 +232,159 @@
     </main>
     
     <div id="toast-container"></div>
+
+    <!-- File input for screenshots (hidden) -->
+    <input type="file" id="screenshot-file" accept="image/*" style="display: none;">
+    
+    <!-- Modal templates -->
+    <div id="modal-templates" style="display: none;">
+        <!-- Screenshot modal template -->
+        <div id="screenshot-modal-template">
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="screenshot-tabs">
+                        <div class="screenshot-tab active" data-target="upload">Upload</div>
+                        <div class="screenshot-tab" data-target="paste">Paste</div>
+                        <div class="screenshot-tab" data-target="capture">Capture</div>
+                    </div>
+                    <div class="screenshot-content" id="upload-tab">
+                        <div class="upload-area" id="screenshot-upload-area">
+                            <p>Drop image here or click to upload</p>
+                            <p class="upload-info">Supported formats: PNG, JPG, GIF</p>
+                        </div>
+                    </div>
+                    <div class="screenshot-content" id="paste-tab" style="display: none;">
+                        <div class="paste-area" id="screenshot-paste-area">
+                            <p>Paste image from clipboard (Ctrl+V)</p>
+                            <p class="paste-info">Click here and press Ctrl+V</p>
+                        </div>
+                    </div>
+                    <div class="screenshot-content" id="capture-tab" style="display: none;">
+                        <div class="capture-info">
+                            <p>Capture a portion of your screen:</p>
+                            <ol>
+                                <li>Take a screenshot using your OS tool (Windows: Win+Shift+S, Mac: Cmd+Shift+4)</li>
+                                <li>Return to this window and paste (Ctrl+V)</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="screenshot-preview" id="screenshot-preview">
+                        <img id="screenshot-preview-img" style="display: none;">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Title (optional)</label>
+                    <input type="text" id="screenshot-title" class="form-control" placeholder="Screenshot title">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description (optional)</label>
+                    <textarea id="screenshot-description" class="form-control" placeholder="Describe what this screenshot shows"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Command History Modal Template -->
+        <div id="command-history-modal-template">
+            <div class="modal-body">
+                <div class="command-history-search">
+                    <input type="text" id="command-history-search" class="form-control" placeholder="Search commands...">
+                </div>
+                <div class="command-history-container" id="command-history-container">
+                    <!-- Command history items will be added here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Tag Modal Template -->
+        <div id="tag-modal-template">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Add Tags</label>
+                    <div class="tag-input-container">
+                        <input type="text" id="tag-input" class="form-control" placeholder="Enter a tag (e.g., critical, sql-injection)">
+                        <button id="add-new-tag-btn" class="btn-primary">Add</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Existing Tags</label>
+                    <div class="existing-tags" id="existing-tags">
+                        <!-- Existing tags will be rendered here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Link Notes Modal Template -->
+        <div id="link-modal-template">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Search Notes to Link</label>
+                    <input type="text" id="link-search" class="form-control" placeholder="Type to search notes...">
+                </div>
+                <div class="form-group">
+                    <div class="link-results" id="link-results">
+                        <!-- Search results will be rendered here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Report Generation Modal Template -->
+        <div id="report-modal-template">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Report Title</label>
+                    <input type="text" id="report-title" class="form-control" placeholder="Enter report title">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Select Notes to Include</label>
+                    <div class="report-notes-container" id="report-notes-container">
+                        <!-- Available notes will be rendered here as checkboxes -->
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Report Format</label>
+                    <select id="report-format" class="form-control">
+                        <option value="markdown">Markdown</option>
+                        <option value="html">HTML</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Command Storage Modal Template -->
+        <div id="command-modal-template">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Command</label>
+                    <input type="text" id="command-input" class="form-control" placeholder="Enter command">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description (optional)</label>
+                    <input type="text" id="command-description" class="form-control" placeholder="Command description">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Output</label>
+                    <textarea id="command-output" class="form-control" placeholder="Command output" rows="6"></textarea>
+                </div>
+                <div class="form-group">
+                    <div class="category-container">
+                        <label class="form-label">Category</label>
+                        <select id="command-category" class="form-control">
+                            <option value="recon">Reconnaissance</option>
+                            <option value="enum">Enumeration</option>
+                            <option value="exploit">Exploitation</option>
+                            <option value="privesc">Privilege Escalation</option>
+                            <option value="persistence">Persistence</option>
+                            <option value="lateral">Lateral Movement</option>
+                            <option value="post">Post-Exploitation</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <!-- Prism.js for syntax highlighting -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/components/prism-core.min.js"></script>
@@ -194,6 +393,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/plugins/toolbar/prism-toolbar.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
     
-    <script src="script.js"></script>
+    <!-- Our application scripts -->
+    <script src="js/utils.js"></script>
+    <script src="js/markdown.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/notes.js"></script>
+    <script src="js/templates.js"></script>
+    <script src="js/tools.js"></script>
+    <script src="js/modals.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
