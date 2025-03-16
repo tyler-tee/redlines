@@ -1849,7 +1849,27 @@ body.dark .preview-image-caption {
     color: var(--dark-text-secondary);
 }
 
-/* Responsive */
+/* Responsive styles for sidebar */
+@media (min-width: 769px) {
+    /* For desktop screens */
+    body {
+        grid-template-columns: var(--sidebar-width) 1fr;
+        grid-template-rows: var(--header-height) 1fr;
+        grid-template-areas:
+            "header header"
+            "sidebar content";
+    }
+    
+    #sidebar {
+        transform: translateX(0) !important; /* Always show on desktop */
+    }
+    
+    #sidebar-toggle {
+        display: none; /* Hide the toggle button on desktop */
+    }
+}
+
+/* For mobile screens, the sidebar is hidden by default */
 @media (max-width: 768px) {
     body {
         grid-template-columns: 1fr;
@@ -1865,20 +1885,43 @@ body.dark .preview-image-caption {
         left: 0;
         bottom: 0;
         width: var(--sidebar-width);
-        transform: translateX(-100%);
-        transition: transform var(--transition-speed);
+        transform: translateX(-100%); /* Hide off screen */
+        transition: transform 0.3s ease;
         z-index: 100;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    body.dark #sidebar {
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
     }
     
     #sidebar.show {
-        transform: translateX(0);
+        transform: translateX(0); /* Show on screen */
     }
     
     #sidebar-toggle {
-        display: flex;
+        display: flex; /* Show toggle button on mobile */
     }
     
     .shortcut-grid {
         grid-template-columns: 1fr;
+    }
+    
+    /* Add overlay for sidebar on mobile */
+    .sidebar-overlay {
+        position: fixed;
+        top: var(--header-height);
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 99;
+        display: none;
+        backdrop-filter: blur(2px);
+    }
+    
+    .sidebar-overlay.show {
+        display: block;
+        animation: fadeIn 0.2s ease forwards;
     }
 }

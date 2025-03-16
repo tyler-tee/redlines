@@ -87,6 +87,9 @@ document.addEventListener('DOMContentLoaded', () => {
             app.initialized = true;
         }
         
+        // Set up sidebar toggle for mobile
+        setupSidebarToggle();
+        
         // Set up autosave
         setInterval(autoSave, app.autosaveInterval);
     }
@@ -163,13 +166,6 @@ document.addEventListener('DOMContentLoaded', () => {
             elements.body.classList.toggle('dark');
             localStorage.setItem('redlines-dark-mode', elements.body.classList.contains('dark'));
         });
-        
-        // Sidebar toggle (mobile)
-        if (elements.sidebarToggle) {
-            elements.sidebarToggle.addEventListener('click', () => {
-                elements.sidebar.classList.toggle('show');
-            });
-        }
         
         // Generate report button
         if (elements.generateReportBtn) {
@@ -560,5 +556,75 @@ document.addEventListener('DOMContentLoaded', () => {
     function hideWelcomeScreen() {
         elements.welcomeScreen.style.display = 'none';
         document.getElementById(app.activeTab).classList.add('show');
+    }
+    
+    /**
+     * Setup sidebar toggle functionality for mobile devices
+     */
+    function setupSidebarToggle() {
+        // Create overlay element if it doesn't exist
+        if (!document.querySelector('.sidebar-overlay')) {
+            const overlay = document.createElement('div');
+            overlay.className = 'sidebar-overlay';
+            document.body.appendChild(overlay);
+        }
+        
+        const overlay = document.querySelector('.sidebar-overlay');
+        
+        // Improve sidebar toggle button functionality
+        if (elements.sidebarToggle) {
+            // Remove any existing event listeners (to prevent duplicates)
+            const newSidebarToggle = elements.sidebarToggle.cloneNode(true);
+            elements.sidebarToggle.parentNode.replaceChild(newSidebarToggle, elements.sidebarToggle);
+            elements.sidebarToggle = newSidebarToggle;
+            
+            // Add click event listener to toggle button
+            elements.sidebarToggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                const isVisible = elements.sidebar.classList.contains('show');
+                
+                // Toggle sidebar visibility
+                elements.sidebar.classList.toggle('show');
+                overlay.classList.toggle('show');
+                
+                // Update ARIA attributes for accessibility
+                elements.sidebarToggle.setAttribute('aria-expanded', !isVisible);
+                
+                // Focus trap for accessibility
+                if (!isVisible) {
+                    // Focus first focusable element in sidebar when opening
+                    setTimeout(() => {
+                        const focusable = elements.sidebar.querySelector('button, [tabindex], input');
+                        if (focusable) focusable.focus();
+                    }, 100);
+                }
+            });
+            
+            // Close sidebar when clicking overlay
+            overlay.addEventListener('click', () => {
+                elements.sidebar.classList.remove('show');
+                overlay.classList.remove('show');
+                elements.sidebarToggle.setAttribute('aria-expanded', 'false');
+            });
+            
+            // Close sidebar when escape key is pressed
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && elements.sidebar.classList.contains('show')) {
+                    elements.sidebar.classList.remove('show');
+                    overlay.classList.remove('show');
+                    elements.sidebarToggle.setAttribute('aria-expanded', 'false');
+                    elements.sidebarToggle.focus(); // Return focus to toggle button
+                }
+            });
+            
+            // Close sidebar when resizing to desktop view
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768 && elements.sidebar.classList.contains('show')) {
+                    elements.sidebar.classList.remove('show');
+                    overlay.classList.remove('show');
+                    elements.sidebarToggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
     }
 });
