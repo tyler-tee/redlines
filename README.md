@@ -2,6 +2,9 @@
 
 Red Lines is a professional note-taking application designed specifically for offensive security practitioners. It provides a structured approach to organizing findings during security assessments, penetration tests, and security research.
 
+![image](https://github.com/user-attachments/assets/b74d34b0-e4cf-4283-a695-10c45f01f41b)
+
+
 ## Features
 
 - **Hierarchical Organization**: Nested folder structure to organize your security notes logically
