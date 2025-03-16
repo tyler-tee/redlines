@@ -539,6 +539,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 tab.click();
             }
         });
+        
+        // Force preview update when switching to preview tab
+        if (newTab === 'preview') {
+            updatePreview();
+        }
     }
     
     /**
