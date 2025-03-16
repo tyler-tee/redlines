@@ -437,18 +437,38 @@ function isAncestor(sourceId, targetId) {
 }
 
 /**
- * Add a new folder
+ * Add a new folder with standard subfolders
  */
-function addFolder(folderName, parentId = null) {
+function addFolder(folderName, parentId = null, addSubfolders = true) {
+    const timestamp = Date.now();
     const newFolder = {
         id: generateId('folder'),
         title: folderName,
         type: 'folder',
-        created: Date.now(),
-        updated: Date.now(),
+        created: timestamp,
+        updated: timestamp,
         expanded: true,
         children: []
     };
+    
+    // Add standard subfolders if requested
+    if (addSubfolders) {
+        const subfolderNames = ['Recon', 'Exploit', 'Loot', 'Misc'];
+        
+        subfolderNames.forEach((subfolderName, index) => {
+            const subfolder = {
+                id: generateId('folder'),
+                title: subfolderName,
+                type: 'folder',
+                created: timestamp + index + 1, // Ensure unique timestamps
+                updated: timestamp + index + 1,
+                expanded: false,
+                children: []
+            };
+            
+            newFolder.children.push(subfolder);
+        });
+    }
     
     if (parentId) {
         const parent = findNoteById(parentId);
@@ -467,6 +487,8 @@ function addFolder(folderName, parentId = null) {
     
     saveNotes();
     renderTree();
+    
+    return newFolder.id; // Return the ID of the new folder
 }
 
 /**
